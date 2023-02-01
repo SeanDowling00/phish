@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Phishing Tool</title>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"/>
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+  <!-- <header class="ms-welcome__header ms-bgColor-neutralLighter">
+    <img width="90" height="90" src="../../assets/Phish.png" alt="Phish" title="Phish" />
+    <h1 class="ms-font-su">Welcome to Phishing Analysis</h1>
+    </header> -->
+    <section id="sideload-msg" class="ms-welcome__main">
+        <h2 class="ms-font-xl">Please sideload your add-in to see app body.</h2>
+    </section> 
+    <main id="app-body" class="ms-welcome__main" style="display: none;">
+        <h2 class="ms-font-xl"> Click to analyse Headers, URLs and Attachments</h2>
+        <div role="button" id="run" class="button button2">
+            <span class="ms-Button-label">Run Scans</span>
+        </div>
+        <div role="button" id="analyseHeaders" class="button button2">
+          <span class="ms-Button-label">Analyse Header Information</span>
+      </div>
+        <div role="button" id="showmore" class="button button2">
+                    <span class="ms-Button-label">Show Results of Analysis</span>
+        </div>
+        <div role="button" id="analyseURLs" class="button button3">
+            <span class="ms-Button-label">Analyze URLs</span>
+        </div>
+        <div role="button" id="analyseAttachments" class="button button4">
+            <span class="ms-Button-label">Analyze Attachments</span>
+        </div>
+              <p>
+                <label id="item-results" class="result"></label>
+                <label id="item-fraudInfo"></label>
+                <label id="item-proceed"></label>
+                <label id="item-sender"></label>
+                <label id="item-date"></label>
+                <label id="item-subject"></label>
+                <label id="item-spf"></label>
+                <label id="item-dmarc"></label>
+                <label id="item-dkim"></label>
+                <label id="item-attachment"></label>
+                <label id="item-attachscan"></label>
+                <label id="item-info"></label>
+                <button id="spf-button" class="spf-button">SPF</button>
+                <button id="dkim-button" class="dkim-button">DKIM</button>
+                <button id="dmarc-button" class="dmarc-button">DMARC</button>
+                <div id="info-container"></div>
+    <script>
+      
+    </script>
+
+    </main>
+    
+</body>
+</html>
+
+<!--
+    Block= Shows result
+    None = Hides result
+-->
+<script>
+
+//===========================================================================================
+      const spfButton = document.getElementById("spf-button");
+      const dkimButton = document.getElementById("dkim-button");
+      const dmarcButton = document.getElementById("dmarc-button");
+      const infoContainer = document.getElementById("info-container");
+      
+//===========================================================================================
+
+      spfButton.addEventListener("click", function() {
+        infoContainer.innerHTML = "Sender Policy Framework (SPF) is an email authentication method designed to detect forging sender addresses during the delivery of the email. It allows the person receiving the email to check that it was sent by an authorized server, preventing spammers from sending messages with forged From addresses.";
+      });
+      
+      dkimButton.addEventListener("click", function() {
+        infoContainer.innerHTML = "DomainKeys Identified Mail (DKIM) is an email authentication method. It allows the person receiving the email to check that it was indeed sent by the domain it claims to be sent from, and that it hasn't been modified during transport.";
+      });
+      
+      dmarcButton.addEventListener("click", function() {
+        infoContainer.innerHTML = "Domain-based Message Authentication, Reporting & Conformance (DMARC) is an email-validation system designed to give email domain owners the ability to protect their domain from unauthorized use, known as email spoofing. DMARC allows a domain owner to publish a policy on their domain that specifies which mechanism(s) (e.g. SPF, DKIM) are used to authenticate email messages sent from their domain.";
+      });
+
+    
+  //===========================================================================================
+      // Analysis only shows first few fields
+    document.getElementById("showmore").style.display = "none";
+    document.getElementById("spf-button").style.display = "none";
+    document.getElementById("dmarc-button").style.display = "none";
+    document.getElementById("dkim-button").style.display = "none";
+    document.getElementById("item-results").style.display = "none";
+    document.getElementById("item-fraudInfo").style.display = "none";
+    document.getElementById("item-proceed").style.display = "none";
+    document.getElementById("info-container").style.display = "none";
+    document.getElementById("showmore").style.display = "none";
+    document.getElementById("item-sender").style.display = "none";
+    document.getElementById("item-date").style.display = "none";
+    document.getElementById("item-subject").style.display = "none";
+    document.getElementById("item-spf").style.display = "none";
+    document.getElementById("item-dkim").style.display = "none";
+    document.getElementById("item-dmarc").style.display = "none";
+    document.getElementById("item-info").style.display = "none";
+    document.getElementById("item-attachment").style.display = "none";
+    document.getElementById("spf-button").style.display = "none";
+    document.getElementById("dmarc-button").style.display = "none";
+    document.getElementById("dkim-button").style.display = "none";
+    document.getElementById("item-attachscan").style.display = "none";
+    document.getElementById("analyseHeaders").style.display = "none";
+    document.getElementById("analyseURLs").style.display = "none";
+    document.getElementById("analyseAttachments").style.display = "none";
+
+    //===========================================================================================
+
+    document.getElementById("run").addEventListener("click", function(){
+    document.getElementById("analyseHeaders").style.display = "block";
+    document.getElementById("analyseURLs").style.display = "block";
+    document.getElementById("analyseAttachments").style.display = "block";
+    document.getElementById("item-results").style.display = "none";
+    document.getElementById("item-fraudInfo").style.display = "none";
+    document.getElementById("item-proceed").style.display = "none";
+    document.getElementById("showmore").style.display = "none";
+    document.getElementById("item-sender").style.display = "none";
+    document.getElementById("item-date").style.display = "none";
+    document.getElementById("item-subject").style.display = "none";
+    document.getElementById("item-spf").style.display = "none";
+    document.getElementById("item-dkim").style.display = "none";
+    document.getElementById("item-dmarc").style.display = "none";
+    document.getElementById("item-info").style.display = "none";
+    document.getElementById("item-attachment").style.display = "none";
+    document.getElementById("spf-button").style.display = "none";
+    document.getElementById("dmarc-button").style.display = "none";
+    document.getElementById("dkim-button").style.display = "none";
+    document.getElementById("info-container").style.display = "none";
+    document.getElementById("item-attachscan").style.display = "none";
+    });
+
+    document.getElementById("analyseHeaders").addEventListener("click", function(){
+    document.getElementById("item-results").style.display = "block";
+    document.getElementById("item-fraudInfo").style.display = "block";
+    document.getElementById("item-proceed").style.display = "block";
+    document.getElementById("info-container").style.display = "none";
+    document.getElementById("showmore").style.display = "block";
+    document.getElementById("item-sender").style.display = "none";
+    document.getElementById("item-date").style.display = "none";
+    document.getElementById("item-subject").style.display = "none";
+    document.getElementById("item-spf").style.display = "none";
+    document.getElementById("item-dkim").style.display = "none";
+    document.getElementById("item-dmarc").style.display = "none";
+    document.getElementById("item-info").style.display = "none";
+    document.getElementById("spf-button").style.display = "none";
+    document.getElementById("dmarc-button").style.display = "none";
+    document.getElementById("dkim-button").style.display = "none";
+    document.getElementById("item-attachment").style.display = "none";
+    document.getElementById("item-attachscan").style.display = "none";
+    });
+
+    document.getElementById("showmore").addEventListener("click", function(){
+    document.getElementById("item-sender").style.display = "block";
+    document.getElementById("item-date").style.display = "block";
+    document.getElementById("item-subject").style.display = "block";
+    document.getElementById("item-spf").style.display = "block";
+    document.getElementById("item-dkim").style.display = "block";
+    document.getElementById("item-dmarc").style.display = "block";
+    document.getElementById("item-info").style.display = "block";
+    document.getElementById("item-attachment").style.display = "none";
+    document.getElementById("spf-button").style.display = "block";
+    document.getElementById("dmarc-button").style.display = "block";
+    document.getElementById("dkim-button").style.display = "block";
+    document.getElementById("info-container").style.display = "block";
+    document.getElementById("item-url").style.display = "none";
+    document.getElementById("item-attachscan").style.display = "none";
+    });
+
+
+    document.getElementById("analyseURLs").addEventListener("click", function(){
+    document.getElementById("item-results").style.display = "none";
+    document.getElementById("item-fraudInfo").style.display = "block";
+    document.getElementById("item-proceed").style.display = "none";
+    document.getElementById("info-container").style.display = "none";
+    document.getElementById("showmore").style.display = "none";
+    document.getElementById("item-sender").style.display = "none";
+    document.getElementById("item-date").style.display = "none";
+    document.getElementById("item-subject").style.display = "none";
+    document.getElementById("item-spf").style.display = "none";
+    document.getElementById("item-dkim").style.display = "none";
+    document.getElementById("item-dmarc").style.display = "none";
+    document.getElementById("item-info").style.display = "none";
+    document.getElementById("spf-button").style.display = "none";
+    document.getElementById("dmarc-button").style.display = "none";
+    document.getElementById("dkim-button").style.display = "none";
+    document.getElementById("item-attachment").style.display = "none";
+    document.getElementById("item-attachscan").style.display = "none";
+    });
+
+    document.getElementById("analyseAttachments").addEventListener("click", function(){
+    document.getElementById("item-results").style.display = "none";
+    document.getElementById("item-fraudInfo").style.display = "none";
+    document.getElementById("item-proceed").style.display = "none";
+    document.getElementById("info-container").style.display = "none";
+    document.getElementById("showmore").style.display = "none";
+    document.getElementById("item-sender").style.display = "none";
+    document.getElementById("item-date").style.display = "none";
+    document.getElementById("item-subject").style.display = "none";
+    document.getElementById("item-spf").style.display = "none";
+    document.getElementById("item-dkim").style.display = "none";
+    document.getElementById("item-dmarc").style.display = "none";
+    document.getElementById("item-info").style.display = "none";
+    document.getElementById("spf-button").style.display = "none";
+    document.getElementById("dmarc-button").style.display = "none";
+    document.getElementById("dkim-button").style.display = "none";
+    document.getElementById("item-attachment").style.display = "block";
+    document.getElementById("item-attachscan").style.display = "block";
+    });
+;
+
+  </script>
+  
+  
+    
